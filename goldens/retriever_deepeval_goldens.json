@@ -1,0 +1,62 @@
+[
+  {
+    "id": "g001",
+    "query": "Explain the functionality of Crick Info's NLP-based query system for live match stats.",
+    "ideal_answer": "Crick Info's NLP-based query system, called Ask Crick Info, allows users to input natural language questions (e.g., 'Who has scored the most runs against Bumrah?') during a live match. The system converts the English query into SQL, leveraging an LLM that understands both the question and the database schema to fetch and return the relevant stats.",
+    "source": "TODO-verify"
+  },
+  {
+    "id": "g002",
+    "query": "Evaluate targeted sampling of negative feedback vs random for hallucination detection efficiency",
+    "ideal_answer": "Targeted sampling of negative feedback (e.g., thumbs down) is likely more efficient than random sampling for detecting hallucinations, as negative feedback signals potential issues like dissatisfaction or errors, including hallucinations. Random sampling may miss these cases, while focusing on negative feedback prioritizes high-risk conversations.",
+    "source": "TODO-verify"
+  },
+  {
+    "id": "g003",
+    "query": "List key non-model elements critical for robust LLM app performance",
+    "ideal_answer": "User interface, prompt/system prompt, tools/APIs, orchestration code (e.g., Langraph), guardrails, output parsers, memory/context, retrieval system (for RAG).",
+    "source": "TODO-verify"
+  },
+  {
+    "id": "g004",
+    "query": "If a model's capability grows, how might its truthfulness change with more misconceptions absorbed?",
+    "ideal_answer": "Truthfulness may decrease as capability grows, since larger models absorb more misconceptions from training data, leading to an inverse relationship between capability and truthfulness.",
+    "source": "TODO-verify"
+  },
+  {
+    "id": "g005",
+    "query": "Explain why software always produces identical outputs for the same inputs.",
+    "ideal_answer": "Software is deterministic, meaning it always produces the same output for the same input because its behavior is strictly defined by its code. For example, a calculator will always return 4 for 2+2, and a login system will always succeed or fail based on fixed conditions.",
+    "source": "TODO-verify"
+  },
+  {
+    "id": "g006",
+    "query": "Which groups, like Frontier Labs, prioritize LLM benchmarking for model development?",
+    "ideal_answer": "Frontier Labs (e.g., OpenAI, Anthropic, Google DeepMind) prioritize LLM benchmarking to track model improvements during development.",
+    "source": "TODO-verify"
+  },
+  {
+    "id": "g007",
+    "query": "Determine when to build vs. buy agent harnesses for custom vs. general tasks.",
+    "ideal_answer": "Build a harness from scratch for highly custom tasks; leverage existing SDKs for general or smaller tasks. The decision depends on requirements, domain, and task specificity—similar to the 'buy vs. build' dilemma in other domains.",
+    "source": "TODO-verify"
+  },
+  {
+    "id": "g008",
+    "query": "How can embedding model, query expansion, k-value, or re-ranking enhance retriever results?",
+    "ideal_answer": "Improving the embedding model can better capture semantic meaning. Query expansion via an LLM refines the input before retrieval. Increasing k (e.g., from 5 to 10) retrieves more candidates. Re-ranking adjusts top results (e.g., moving rank 8 to 3) for better relevance.",
+    "source": "TODO-verify"
+  },
+  {
+    "id": "g009",
+    "query": "If evaluating a chatbot, what signals like relevance or toxicity must be computed vs. stored?",
+    "ideal_answer": "Signals like answer relevance, correctness, hallucination, toxicity, bias, and fairness must be computed. Other signals (unspecified in context) are simply captured and stored.",
+    "source": "TODO-verify"
+  },
+  {
+    "id": "g010",
+    "query": "If budget is 3L INR, how does 95 as USD-INR rate affect Claude fabel 5's monthly cost?",
+    "ideal_answer": "The USD-INR rate of 95 converts the monthly cost of Claude fabel 5 (input: $10/million tokens, output: $50/million tokens) from USD to INR, allowing you to check affordability against the 3 lakh INR budget.",
+    "source": "TODO-verify"
+  }
+]

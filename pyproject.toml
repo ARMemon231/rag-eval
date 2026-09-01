@@ -1,0 +1,18 @@
+[project]
+name = "rag-eval-project"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "chromadb>=1.5.9",
+    "deepeval>=4.1.7",
+    "langchain-chroma>=1.1.0",
+    "langchain-core>=1.5.4",
+    "langchain-mistralai>=1.1.6",
+    "langchain-text-splitters>=1.1.2",
+    "pytest>=9.1.1",
+    "python-dotenv>=1.2.2",
+    "sentence-transformers>=5.7.0",
+    "streamlit>=1.45.0",
+]
