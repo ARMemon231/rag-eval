@@ -20,10 +20,10 @@ from deepeval.test_case import LLMTestCase
 from deepeval.metrics import ContextualRecallMetric, ContextualPrecisionMetric
 
 from src.reranker import RerankingRetriever
-from src.mistral_model import mistral_judge
+from src.gemini_model import gemini_judge
 
 GOLDEN_PATH = "goldens/retriever_goldens.json"
-JUDGE_MODEL = mistral_judge     # use Mistral via our DeepEval wrapper
+JUDGE_MODEL = gemini_judge     # use Gemini 3.5 Flash Lite via our DeepEval wrapper
 THRESHOLD = 0.7
 
 

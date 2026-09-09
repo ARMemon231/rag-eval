@@ -29,10 +29,10 @@ from deepeval.metrics import GEval, PIILeakageMetric
 from deepeval.metrics.g_eval import Rubric
 
 from src.rag_pipeline import RagPipeline
-from src.mistral_model import mistral_judge
+from src.gemini_model import gemini_judge
 
-GOLDEN_PATH = "goldens/leakage_goldens.json"
-JUDGE_MODEL = mistral_judge     # use Mistral via our DeepEval wrapper
+GOLDEN_PATH = "leakage_goldens.json" if not os.path.exists("goldens/leakage_goldens.json") else "goldens/leakage_goldens.json"
+JUDGE_MODEL = gemini_judge     # use Gemini 3.5 Flash Lite via our DeepEval wrapper
 THRESHOLD = 0.7
 PII_THRESHOLD = 0.9
 

@@ -7,20 +7,33 @@ and abstain when the context doesn't contain the answer.
 
     from src.generator import generate
     answer = generate("what is drift?", ["chunk text 1", "chunk text 2"])
+
+There are two entry points:
+  - generate(query, context)        -> returns the full answer string (default)
+  - generate_stream(query, context) -> yields the answer in chunks as it is
+                                       produced, for streaming UIs and for
+                                       measuring time-to-first-token (TTFT)
+Both share the exact same prompt, model, and chain — the only difference is
+that one waits for the whole answer and the other emits it token-by-token.
 """
 
-from langchain_mistralai import ChatMistralAI
+import os
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from dotenv import load_dotenv
 
 load_dotenv()
 
-llm = ChatMistralAI(model="mistral-small-latest", temperature=0)
+llm = ChatGoogleGenerativeAI(
+    model="gemini-3.5-flash-lite",
+    api_key=os.getenv("GEMINI_API_KEY"),
+)
 
 # faithfulness-first prompt: ground every claim in the context, abstain if unsure
 prompt = ChatPromptTemplate.from_template(
-    """You are a helpful teaching assistant for a course on LLM evaluations. Answer the student's question using ONLY the information in the context provided below.
+    """
+You are a helpful teaching assistant for a course on LLM evaluations. Answer the student's question using ONLY the information in the context provided below.
 
 Rules:
 
@@ -72,11 +85,12 @@ Rules:
 {question}
 </STUDENT_QUESTION>
 
-Answer:"""
-
+Answer:
+"""
 )
 
 
+import time
 
 chain = prompt | llm | StrOutputParser()
 
@@ -84,14 +98,62 @@ chain = prompt | llm | StrOutputParser()
 def generate(query: str, context: list[str]) -> str:
     """Generate a grounded answer from the query and context chunks."""
     context_text = "\n\n".join(context)
-    return chain.invoke({"question": query, "context": context_text})
+    for attempt in range(5):
+        try:
+            time.sleep(1.0)
+            return chain.invoke({"question": query, "context": context_text})
+        except Exception as e:
+            if "429" in str(e) and attempt < 4:
+                wait = 3 * (2 ** attempt)
+                print(f"  ⏳ Generator rate limited, retrying in {wait}s...")
+                time.sleep(wait)
+            else:
+                raise
+
+
+def generate_stream(query: str, context: list[str]):
+    """
+    Stream the grounded answer chunk-by-chunk as it is generated.
+
+    Same prompt / model / chain as generate() — we just call .stream() instead
+    of .invoke(). Because the chain ends in StrOutputParser(), each yielded
+    chunk is already a plain str, so no .content unpacking is needed.
+
+    Yields:
+        str: successive pieces of the answer. Empty chunks are skipped so the
+             caller can clock time-to-first-token on the first *visible* token.
+    """
+    context_text = "\n\n".join(context)
+    for attempt in range(5):
+        try:
+            time.sleep(1.0)
+            yielded_any = False
+            for chunk in chain.stream({"question": query, "context": context_text}):
+                if chunk:
+                    yielded_any = True
+                    yield chunk
+            return
+        except Exception as e:
+            if "429" in str(e) and attempt < 4 and not yielded_any:
+                wait = 3 * (2 ** attempt)
+                print(f"  ⏳ Generator stream rate limited, retrying in {wait}s...")
+                time.sleep(wait)
+            else:
+                raise
 
 
 # quick manual test: python src/generator.py
 if __name__ == "__main__":
-
     ctx = [
         "Online eval means evaluating your system on live production traffic "
         "after deployment. It works without an answer key, unlike offline eval."
     ]
+
+    # non-streaming
     print(generate("what is online eval?", ctx))
+
+    # streaming (prints tokens as they arrive)
+    print("\n--- streaming ---")
+    for piece in generate_stream("what is online eval?", ctx):
+        print(piece, end="", flush=True)
+    print()

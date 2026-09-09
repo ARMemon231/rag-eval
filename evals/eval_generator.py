@@ -33,12 +33,12 @@ from deepeval import evaluate
 from deepeval.evaluate.configs import AsyncConfig, CacheConfig
 from deepeval.test_case import LLMTestCase
 from deepeval.metrics import FaithfulnessMetric, AnswerRelevancyMetric
-from src.mistral_model import mistral_judge
+from src.gemini_model import gemini_judge
 
 from src.generator import generate   # your generator: generate(query, context) -> answer
 
 GOLDEN_PATH = "goldens/faithfulness_dataset.json"
-JUDGE_MODEL =  mistral_judge
+JUDGE_MODEL = gemini_judge
 THRESHOLD = 0.7
 
 

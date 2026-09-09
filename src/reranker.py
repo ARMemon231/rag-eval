@@ -7,13 +7,13 @@ asking the model to score each candidate chunk's relevance (0-10).
 
 import re, json, time
 from src.retriever import load_store
-from src.mistral_model import MistralDeepEvalModel
+from src.gemini_model import GeminiDeepEvalModel
 
 
 class RerankingRetriever:
     def __init__(self, fetch_k=10, top_k=5):
         self.store = load_store()
-        self.model = MistralDeepEvalModel(model_name="mistral-medium-latest")
+        self.model = GeminiDeepEvalModel(model_name="gemini-3.5-flash-lite")
         self.fetch_k = fetch_k   # how many the bi-encoder brings back (over-retrieve)
         self.top_k = top_k       # how many survive after reranking
 
@@ -23,7 +23,7 @@ class RerankingRetriever:
         # Build a numbered list of document excerpts (truncate to save tokens)
         doc_list = ""
         for i, doc in enumerate(docs):
-            excerpt = doc.page_content[:500]  # first 500 chars is enough
+            excerpt = doc.page_content[:300]  # first 300 chars is enough
             doc_list += f"\n[DOC {i}]: {excerpt}\n"
 
         prompt = f"""You are a relevance judge. Given a query and a list of documents, 
